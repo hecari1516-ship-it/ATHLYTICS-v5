@@ -1,0 +1,498 @@
+/* =====================================================================
+   ATHLYTICS — Sistema de identidad visual
+   Concepto: "pizarrón táctico bajo luces de estadio" — fondo verde-carbón
+   oscuro tipo cancha de noche, trazos color gis/marcador como en una
+   pizarra de vestidor, acentos ámbar/lima para lectura rápida de datos.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root{
+  --bg:        #0F1E19;
+  --surface:   #17281F;
+  --surface-2: #1E332A;
+  --line:      #2C4438;
+  --chalk:     #F2F1E8;
+  --chalk-dim: #8FA79B;
+  --lime:      #B7F03C;
+  --amber:     #FFB84C;
+  --red:       #FF5D5D;
+  --blue:      #7FB3FF;
+  --radius:    10px;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(183,240,60,0.05), transparent 45%),
+    var(--bg);
+  color:var(--chalk);
+  font-family:'Inter', sans-serif;
+  min-height:100vh;
+}
+
+h1,h2,h3, .num, .stat{
+  font-family:'Oswald', sans-serif;
+  letter-spacing:0.02em;
+  text-transform:uppercase;
+}
+
+.mono{ font-family:'JetBrains Mono', monospace; }
+
+a{ color:var(--lime); text-decoration:none; }
+
+/* ---------- Layout shell ---------- */
+.topbar{
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+  padding:18px 32px; border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(23,40,31,0.9), rgba(23,40,31,0.4));
+}
+.topbar .brand{
+  font-family:'Oswald', sans-serif; font-weight:700; font-size:22px;
+  letter-spacing:0.06em; justify-self:start;
+}
+.topbar .brand span{ color:var(--lime); }
+.nav-center{ justify-self:center; display:flex; flex-wrap:wrap; justify-content:center; }
+.topbar nav a{
+  color:var(--chalk-dim); margin:0 16px; font-size:13px; font-weight:500;
+  text-transform:uppercase; letter-spacing:0.05em; white-space:nowrap;
+}
+.topbar nav a:hover, .topbar nav a.active{ color:var(--lime); }
+.nav-exit{
+  justify-self:end; color:var(--chalk-dim); font-size:13px; font-weight:600;
+  text-transform:uppercase; letter-spacing:0.05em; border:1px solid var(--line);
+  padding:7px 16px; border-radius:6px;
+}
+.nav-exit:hover{ color:var(--red); border-color:var(--red); }
+.nav-add{
+  margin-left:6px !important; background:var(--lime); color:#0F1E19 !important;
+  padding:8px 16px; border-radius:20px; font-weight:700 !important; display:inline-flex;
+  align-items:center; gap:5px;
+}
+.nav-add:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+.nav-add::after{ display:none !important; }
+@media (max-width:900px){
+  .topbar{ grid-template-columns:1fr; row-gap:12px; text-align:center; }
+  .brand, .nav-exit{ justify-self:center; }
+}
+
+.wrap{ max-width:1180px; margin:0 auto; padding:32px; }
+
+/* ---------- Auth screen ---------- */
+.auth-shell{
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px),
+    var(--bg);
+}
+.auth-card{
+  width:380px; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:36px; box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+.auth-card h1{ font-size:26px; margin:0 0 4px; }
+.auth-card .sub{ color:var(--chalk-dim); font-size:13px; margin-bottom:24px; }
+.field{ margin-bottom:16px; }
+.field label{ display:block; font-size:12px; color:var(--chalk-dim); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; }
+.field input, .field select{
+  width:100%; padding:11px 12px; background:var(--surface-2);
+  border:1px solid var(--line); border-radius:6px; color:var(--chalk); font-size:14px;
+}
+.field input:focus, .field select:focus{ outline:2px solid var(--lime); border-color:var(--lime); }
+.btn{
+  display:inline-block; width:100%; text-align:center; padding:12px 16px;
+  background:var(--lime); color:#0F1E19; font-weight:700; border:none;
+  border-radius:6px; cursor:pointer; font-size:14px; letter-spacing:0.03em;
+  text-transform:uppercase;
+}
+.btn:hover{ filter:brightness(1.08); }
+.btn-ghost{
+  background:transparent; border:1px solid var(--line); color:var(--chalk);
+}
+.select-filter{
+  padding:10px 14px; background:var(--surface-2); border:1px solid var(--line);
+  border-radius:6px; color:var(--chalk); font-size:13px; font-family:inherit; cursor:pointer;
+}
+.select-filter:focus{ outline:2px solid var(--lime); border-color:var(--lime); }
+.error-msg{ background:rgba(255,93,93,0.12); border:1px solid var(--red); color:#ffb4b4; padding:10px 12px; border-radius:6px; font-size:13px; margin-bottom:16px; }
+
+/* ---------- Plantel grid ---------- */
+.page-head{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;}
+.page-head h1{ font-size:30px; margin:0; }
+.page-head .eyebrow{ color:var(--lime); font-size:12px; letter-spacing:0.15em; margin-bottom:4px; }
+
+.grid-players{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:18px;
+}
+
+.pcard{
+  position:relative; background:linear-gradient(160deg, var(--surface-2), var(--surface));
+  border:1px solid var(--line); border-radius:var(--radius); padding:22px 18px 18px;
+  overflow:hidden; display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+.pcard::before{
+  content:""; position:absolute; top:-40%; right:-40%; width:140%; height:140%;
+  background:radial-gradient(circle, rgba(183,240,60,0.05), transparent 60%);
+}
+.pcard .sport-chip{
+  position:absolute; top:14px; right:14px; margin:0;
+}
+/* Avatar circular centrado y simétrico — nunca tapado por otros elementos */
+.pcard .pcard-avatar-wrap{
+  position:relative; width:84px; height:84px; margin:4px 0 10px;
+}
+.pcard .pcard-photo{
+  width:84px; height:84px; border-radius:50%; object-fit:cover; border:2px solid var(--line);
+  display:block; background:var(--surface-2);
+}
+.pcard .pcard-avatar-wrap:has(.pcard-photo){ }
+.pcard .pcard-initials{
+  width:84px; height:84px; border-radius:50%; background:var(--surface-2);
+  border:2px solid var(--line); display:flex; align-items:center; justify-content:center;
+  font-family:'Oswald'; font-size:26px; font-weight:700; color:var(--chalk-dim);
+}
+.pcard .ovr-pill{
+  position:absolute; bottom:-4px; right:-6px; min-width:30px; height:22px; padding:0 6px;
+  border-radius:11px; background:var(--lime); color:#0F1E19; font-family:'Oswald';
+  font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--surface); box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+.pcard .pcard-tags{ display:flex; justify-content:center; flex-wrap:wrap; gap:6px; margin-top:2px; }
+.pcard .pos-tag{
+  display:inline-block; font-size:11px; font-weight:600; letter-spacing:0.05em;
+  padding:3px 8px; border-radius:4px; background:var(--surface); border:1px solid var(--line);
+  color:var(--chalk-dim); margin:0;
+}
+.pcard .pname{ font-size:17px; font-weight:600; margin:12px 0 2px; font-family:'Inter'; text-transform:none; letter-spacing:0; }
+.pcard .pmeta{ color:var(--chalk-dim); font-size:12px; }
+
+/* ---------- Indicador de riesgo: pill de color, siempre visible ---------- */
+.risk-dot{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
+.risk-optimo{ background:var(--lime); }
+.risk-precaucion{ background:var(--amber); }
+.risk-alto{ background:var(--red); }
+.risk-baja, .risk-sin{ background:#5b7568; }
+.risk-row{
+  margin-top:14px; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+  display:inline-flex; align-items:center; padding:5px 12px; border-radius:20px;
+}
+.risk-row.risk-pill-optimo{ background:rgba(183,240,60,0.12); color:var(--lime); border:1px solid var(--lime); }
+.risk-row.risk-pill-precaucion{ background:rgba(255,184,76,0.12); color:var(--amber); border:1px solid var(--amber); }
+.risk-row.risk-pill-alto{ background:rgba(255,93,93,0.14); color:var(--red); border:1px solid var(--red); }
+.risk-row.risk-pill-baja, .risk-row.risk-pill-sin{ background:rgba(255,255,255,0.05); color:var(--chalk-dim); border:1px solid var(--line); }
+
+/* ---------- Ficha / player card FIFA-style ---------- */
+.ficha-grid{ display:grid; grid-template-columns:340px 1fr; gap:28px; align-items:start; }
+@media (max-width:820px){ .ficha-grid{ grid-template-columns:1fr; } }
+
+.fifa-card{
+  background:linear-gradient(160deg, #24402F 0%, #142720 60%, #0F1E19 100%);
+  border:1px solid var(--line); border-radius:16px; padding:28px; text-align:center;
+  position:relative;
+}
+.fifa-card .ovr-big{ font-size:64px; font-weight:700; color:var(--lime); line-height:1; }
+.fifa-card .pos-big{ font-size:16px; color:var(--chalk-dim); letter-spacing:0.1em; }
+.fifa-card .dorsal-big{
+  position:absolute; top:22px; right:24px; font-family:'Oswald'; font-weight:700;
+  font-size:34px; color:var(--chalk); line-height:1; opacity:0.85;
+}
+.fifa-card .dorsal-big small{ font-size:14px; color:var(--chalk-dim); font-weight:500; display:block; }
+.fifa-card .avatar{
+  width:110px; height:110px; border-radius:50%; margin:16px auto;
+  background:var(--surface-2); border:2px solid var(--lime);
+  display:flex; align-items:center; justify-content:center; font-size:38px; font-weight:700;
+}
+.fifa-card .fname{ font-size:20px; font-weight:600; margin-top:6px; font-family:'Inter'; text-transform:none; }
+.fifa-card .fmeta{ color:var(--chalk-dim); font-size:13px; margin-top:2px;}
+
+.form-strip{ display:flex; justify-content:center; gap:6px; margin-top:18px; }
+.form-dot{ width:14px; height:14px; border-radius:3px; }
+
+.risk-banner{
+  margin-top:20px; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:600;
+  text-transform:uppercase; letter-spacing:0.04em;
+}
+.risk-banner.optimo{ background:rgba(183,240,60,0.12); color:var(--lime); border:1px solid var(--lime);}
+.risk-banner.precaucion{ background:rgba(255,184,76,0.12); color:var(--amber); border:1px solid var(--amber);}
+.risk-banner.alto{ background:rgba(255,93,93,0.12); color:var(--red); border:1px solid var(--red);}
+.risk-banner.sin, .risk-banner.baja{ background:rgba(255,255,255,0.05); color:var(--chalk-dim); border:1px solid var(--line);}
+
+.panel{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px; margin-bottom:20px; }
+.panel h3{ font-size:15px; margin:0 0 14px; color:var(--chalk-dim); letter-spacing:0.08em; }
+
+.acwr-bar-track{ background:var(--surface-2); border-radius:6px; height:10px; overflow:hidden; }
+.acwr-bar-fill{ height:100%; border-radius:6px; }
+
+table.data{ width:100%; border-collapse:collapse; font-size:13px; }
+table.data th{ text-align:left; color:var(--chalk-dim); font-weight:500; padding:8px 6px; border-bottom:1px solid var(--line); text-transform:uppercase; font-size:11px; letter-spacing:0.05em;}
+table.data td{ padding:9px 6px; border-bottom:1px solid rgba(255,255,255,0.04); }
+
+/* ---------- Heat map (equipo) ---------- */
+.heatgrid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:12px; }
+.heatcell{ border-radius:8px; padding:14px; text-align:center; border:1px solid var(--line); }
+.heatcell .hname{ font-size:13px; font-weight:600; margin-top:6px; }
+.heatcell .hacwr{ font-family:'JetBrains Mono'; font-size:20px; margin-top:4px; }
+
+/* ---------- Session capture (RPE tap grid) ---------- */
+.rpe-row{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px 14px; background:var(--surface-2); border-radius:8px; margin-bottom:10px;
+}
+.rpe-name{ font-weight:600; min-width:150px; }
+.rpe-scale{ display:flex; gap:5px; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:4px; }
+.rpe-scale button{
+  width:28px; height:28px; border-radius:50%; border:1px solid transparent;
+  background:transparent; color:var(--chalk-dim); font-family:'JetBrains Mono'; font-size:12px; cursor:pointer;
+}
+.rpe-scale button:hover{ background:rgba(127,179,255,0.12); color:var(--chalk); }
+.asistio-toggle{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--chalk-dim); }
+
+.btn-sm{ padding:8px 14px; font-size:12px; width:auto; display:inline-block; }
+.flex-between{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+.muted{ color:var(--chalk-dim); font-size:13px; }
+.empty-state{ text-align:center; padding:60px 20px; color:var(--chalk-dim); }
+
+/* =====================================================================
+   V2 — Multi-deporte, LTAD, Formaciones, Partidos, Reportes
+   ===================================================================== */
+
+.hidden{ display:none !important; }
+
+/* ---------- Chips / tags ---------- */
+.sport-chip{
+  display:inline-block; background:rgba(183,240,60,0.14); color:var(--lime);
+  border:1px solid var(--lime); font-family:'JetBrains Mono'; font-size:10px; font-weight:700;
+  letter-spacing:0.06em; padding:4px 8px; border-radius:5px;
+}
+.sport-chip-mini{
+  display:inline-block; background:rgba(183,240,60,0.14); color:var(--lime);
+  border:1px solid var(--lime); font-family:'JetBrains Mono'; font-size:9px; font-weight:700;
+  letter-spacing:0.05em; padding:2px 6px; border-radius:4px; vertical-align:middle;
+}
+
+/* ---------- LTAD ---------- */
+.ltad-panel .ltad-badge{
+  display:inline-block; background:rgba(183,240,60,0.12); color:var(--lime);
+  border:1px solid var(--lime); padding:6px 12px; border-radius:20px;
+  font-family:'Oswald'; font-size:13px; letter-spacing:0.04em; text-transform:uppercase;
+}
+
+/* ---------- Comparativa por categoría ---------- */
+.compare-row{ display:grid; grid-template-columns:110px 1fr 130px; align-items:center; gap:10px; margin-bottom:10px; }
+.compare-label{ font-size:12px; color:var(--chalk-dim); text-transform:uppercase; letter-spacing:0.04em; }
+.compare-track{ position:relative; background:var(--surface-2); border-radius:6px; height:10px; overflow:visible; }
+.compare-fill{ height:100%; border-radius:6px; background:var(--lime); }
+.compare-fill.self{ background:var(--lime); }
+.compare-marker{ position:absolute; top:-3px; width:2px; height:16px; background:var(--chalk); }
+.compare-value{ font-size:12px; text-align:right; }
+
+/* ---------- Formación / cancha drag & drop ---------- */
+.formation-controls select{
+  padding:10px 14px; background:var(--surface-2); border:1px solid var(--line); border-radius:6px; color:var(--chalk); margin-bottom:16px;
+}
+.formation-controls-row{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px 20px;
+}
+.formation-controls-group{ display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
+.formation-layout{ display:grid; grid-template-columns:240px 1fr; gap:18px; align-items:start; }
+@media (max-width:820px){ .formation-layout{ grid-template-columns:1fr; } }
+
+.bench-list{ display:flex; flex-direction:column; gap:8px; max-height:560px; overflow-y:auto; }
+.chip{
+  display:flex; align-items:center; gap:8px; background:var(--surface-2); border:1px solid var(--line);
+  border-radius:8px; padding:10px 12px; cursor:grab; font-size:13px; font-weight:600;
+}
+.chip:active{ cursor:grabbing; }
+.chip-pos{
+  background:var(--surface); border:1px solid var(--line); color:var(--chalk-dim); font-size:10px;
+  padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:0.04em;
+}
+
+.pitch{
+  position:relative; width:100%; aspect-ratio:2/3; max-width:460px; margin:0 auto;
+  border-radius:12px; border:2px solid rgba(242,241,232,0.25); overflow:hidden;
+}
+.pitch.futbol{ background:linear-gradient(180deg, #1E5B3A, #164A2E 50%, #1E5B3A); }
+.pitch.basquet{ background:linear-gradient(180deg, #7A4A2A, #653D22 50%, #7A4A2A); aspect-ratio:2/2.4; }
+.pitch-lines{ position:absolute; inset:0; pointer-events:none; }
+.pitch.futbol .center-line{ position:absolute; top:50%; left:0; right:0; height:2px; background:rgba(242,241,232,0.25); }
+.pitch.futbol .center-circle{ position:absolute; top:50%; left:50%; width:22%; aspect-ratio:1; border:2px solid rgba(242,241,232,0.25); border-radius:50%; transform:translate(-50%,-50%); }
+.pitch.futbol .box{ position:absolute; left:20%; width:60%; height:14%; border:2px solid rgba(242,241,232,0.25); }
+.pitch.futbol .box-top{ top:0; border-top:none; }
+.pitch.futbol .box-bottom{ bottom:0; border-bottom:none; }
+.pitch.basquet .center-circle.court{ position:absolute; top:50%; left:50%; width:26%; aspect-ratio:1; border:2px solid rgba(242,241,232,0.25); border-radius:50%; transform:translate(-50%,-50%); }
+.pitch.basquet .key{ position:absolute; left:32%; width:36%; height:20%; border:2px solid rgba(242,241,232,0.25); }
+.pitch.basquet .key-top{ top:0; border-top:none; }
+.pitch.basquet .key-bottom{ bottom:0; border-bottom:none; }
+
+.slot{
+  position:absolute; width:64px; height:64px; margin-left:-32px; margin-top:-32px;
+  background:rgba(15,30,25,0.85); border:2px dashed rgba(242,241,232,0.4); border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:var(--chalk); text-align:center; transition:border-color 0.15s, background 0.15s;
+}
+.slot:hover{ border-color:var(--lime); }
+.slot .slot-label{ font-size:9px; color:var(--chalk-dim); text-transform:uppercase; letter-spacing:0.04em; }
+.slot .slot-player{ font-size:11px; font-weight:700; }
+.slot[data-jugador-id]{ background:rgba(183,240,60,0.18); border-style:solid; border-color:var(--lime); }
+
+/* ---------- Reportes ---------- */
+.report-cards{ display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:14px; margin-bottom:20px; }
+.report-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:18px; text-align:center;
+}
+.report-card .rc-value{ display:block; font-family:'Oswald'; font-size:30px; font-weight:700; color:var(--lime); }
+.report-card .rc-label{ display:block; font-size:11px; color:var(--chalk-dim); text-transform:uppercase; letter-spacing:0.04em; margin-top:4px; }
+
+/* ---------- Tabla de estadísticas de partido ---------- */
+.stat-table-wrap{ overflow-x:auto; }
+.stat-table{ min-width:760px; }
+.stat-input{
+  width:56px; padding:6px 4px; background:var(--surface-2); border:1px solid var(--line);
+  border-radius:4px; color:var(--chalk); font-family:'JetBrains Mono'; font-size:12px; text-align:center;
+}
+
+/* ---------- textarea consistente con .field ---------- */
+.field textarea:focus{ outline:2px solid var(--lime); border-color:var(--lime); }
+
+/* =====================================================================
+   V3 — Edición de jugador, foto, número, cuestionario, autoasignación,
+   animaciones dinámicas, mapa de riesgo y flujo de trabajo optimizado
+   ===================================================================== */
+
+.hidden{ display:none !important; }
+
+/* ---------- Animaciones base ---------- */
+@keyframes fadeInUp{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:translateY(0);} }
+@keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes slideDown{ from{ opacity:0; transform:translateY(-12px);} to{ opacity:1; transform:translateY(0);} }
+@keyframes popIn{ 0%{ transform:scale(0.85); } 60%{ transform:scale(1.08); } 100%{ transform:scale(1); } }
+@keyframes toastIn{ from{ opacity:0; transform:translateY(-6px);} to{ opacity:1; transform:translateY(0);} }
+
+.topbar{ animation:slideDown 0.35s ease both; }
+.wrap{ animation:fadeIn 0.3s ease both; }
+.panel, .pcard, .report-card, .auth-card, .heatcell{ animation:fadeInUp 0.35s ease both; }
+.panel:nth-of-type(2){ animation-delay:0.05s; }
+.panel:nth-of-type(3){ animation-delay:0.1s; }
+.panel:nth-of-type(4){ animation-delay:0.15s; }
+.report-cards .report-card:nth-child(1){ animation-delay:0.02s; }
+.report-cards .report-card:nth-child(2){ animation-delay:0.06s; }
+.report-cards .report-card:nth-child(3){ animation-delay:0.10s; }
+.report-cards .report-card:nth-child(4){ animation-delay:0.14s; }
+.report-cards .report-card:nth-child(5){ animation-delay:0.18s; }
+.report-cards .report-card:nth-child(6){ animation-delay:0.22s; }
+
+a, .btn, .chip, .pcard, .report-card, .heatcell, .rpe-scale button, .quiz-scale button, .slot{
+  transition: all 0.18s ease;
+}
+.btn:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(183,240,60,0.25); }
+.btn:active{ transform:translateY(0); }
+.pcard:hover{ transform:translateY(-3px); border-color:var(--lime); box-shadow:0 12px 24px rgba(0,0,0,0.35); }
+.pcard:hover .pcard-photo, .pcard:hover .pcard-initials{ border-color:var(--lime); }
+.pcard-photo, .pcard-initials{ transition:border-color 0.18s ease; }
+.report-card:hover{ transform:translateY(-3px); border-color:var(--lime); }
+.heatcell:hover{ transform:scale(1.03); }
+.topbar nav a{ position:relative; }
+.topbar nav a::after{
+  content:""; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:var(--lime);
+  transition:width 0.2s ease;
+}
+.topbar nav a:hover::after, .topbar nav a.active::after{ width:100%; }
+
+.slot.pop{ animation:popIn 0.28s ease; }
+.chip{ animation:fadeInUp 0.25s ease both; }
+
+/* ---------- Toast de confirmación (reemplaza banners de texto largo) ---------- */
+.toast-ok{
+  display:inline-flex; align-items:center; gap:8px; background:rgba(183,240,60,0.14);
+  border:1px solid var(--lime); color:var(--lime); padding:9px 14px; border-radius:8px;
+  font-size:13px; font-weight:600; margin-bottom:18px; animation:toastIn 0.3s ease both;
+}
+
+/* ---------- Foto de jugador ---------- */
+.avatar-photo{ padding:0; overflow:hidden; }
+.avatar-photo img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
+.foto-preview{ width:96px; height:96px; object-fit:cover; border-radius:50%; border:2px solid var(--lime); box-shadow:0 4px 14px rgba(0,0,0,0.35); display:block; }
+.pcard-photo{ width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid var(--line); }
+.ovr-small{ font-size:15px; margin:6px 0 0; color:var(--lime); }
+
+/* ---------- Selector circular de foto — simétrico, no tapa otros campos ---------- */
+.foto-upload-row{ display:flex; align-items:center; gap:18px; }
+.foto-circle-preview{
+  width:88px; height:88px; min-width:88px; border-radius:50%; background:var(--surface-2);
+  border:2px dashed var(--line); display:flex; align-items:center; justify-content:center;
+  overflow:hidden; transition:border-color 0.2s ease, background 0.2s ease;
+}
+.foto-circle-preview.has-photo{ border-style:solid; border-color:var(--lime); }
+.foto-circle-preview img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
+.foto-circle-preview img.pop{ animation:popIn 0.32s ease; }
+.foto-circle-placeholder{ font-size:10px; color:var(--chalk-dim); text-transform:uppercase; letter-spacing:0.04em; text-align:center; padding:0 6px; }
+.foto-upload-btn{
+  display:inline-flex; align-items:center; justify-content:center; padding:10px 18px;
+  border:1px solid var(--lime); color:var(--lime); border-radius:8px; font-size:13px;
+  font-weight:600; cursor:pointer; transition:background 0.18s ease, color 0.18s ease;
+}
+.foto-upload-btn:hover{ background:var(--lime); color:#0F1E19; }
+
+.edit-fab{
+  position:absolute; top:54px; left:16px; width:30px; height:30px; border-radius:50%;
+  background:var(--surface-2); border:1px solid var(--line); color:var(--chalk-dim);
+  display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:13px;
+}
+.edit-fab:hover{ color:var(--lime); border-color:var(--lime); transform:rotate(-8deg) scale(1.08); }
+
+/* ---------- Cuestionario de evaluación ---------- */
+.quiz-block h3{ margin-bottom:16px; }
+.quiz-row{ margin-bottom:20px; }
+.quiz-q{ display:block; font-size:13px; margin-bottom:10px; color:var(--chalk); }
+.quiz-scale-wrap{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+.quiz-scale{
+  display:flex; gap:10px; justify-content:center; background:var(--surface-2);
+  border:1px solid var(--line); border-radius:30px; padding:6px; width:100%; max-width:320px;
+}
+.quiz-scale button{
+  flex:1; aspect-ratio:1; min-width:38px; max-width:44px; border-radius:50%; border:1px solid transparent;
+  background:transparent; color:var(--chalk-dim); font-family:'JetBrains Mono'; font-size:14px;
+  font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.quiz-scale button:hover{ background:rgba(183,240,60,0.1); color:var(--chalk); }
+.quiz-scale button.active{
+  background:var(--lime); color:#0F1E19; border-color:var(--lime); font-weight:700;
+  transform:scale(1.08); box-shadow:0 4px 12px rgba(183,240,60,0.35);
+}
+.quiz-scale-labels{
+  display:flex; justify-content:space-between; width:100%; max-width:320px;
+  font-size:10px; color:var(--chalk-dim); text-transform:uppercase; letter-spacing:0.05em; padding:0 6px;
+}
+
+/* ---------- Chips de formación con foto/OVR ---------- */
+.chip{ position:relative; padding-right:44px; }
+.chip-photo{ width:26px; height:26px; border-radius:50%; object-fit:cover; }
+.chip-name{ flex:1; }
+.chip-ovr{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  font-family:'JetBrains Mono'; font-size:11px; color:var(--lime); font-weight:700;
+}
+
+/* ---------- Entrenamiento / RPE: color propio, distinto al de riesgo ---------- */
+.rpe-scale button.active{ background:var(--blue); color:#0F1E19; border-color:var(--blue); font-weight:700; }
+
+/* ---------- Leyenda del mapa de riesgo (sin párrafos, solo chips) ---------- */
+.legend-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+.legend-chip{
+  display:inline-flex; align-items:center; gap:6px; font-size:11px; color:var(--chalk-dim);
+  background:var(--surface); border:1px solid var(--line); padding:5px 10px; border-radius:20px;
+  text-transform:uppercase; letter-spacing:0.04em;
+}
+.legend-dot{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+
+/* ---------- Enlaces rápidos entre secciones relacionadas ---------- */
+.quick-links{ display:flex; gap:10px; flex-wrap:wrap; margin:-8px 0 20px; }
+.quick-links a{
+  font-size:12px; color:var(--chalk-dim); border:1px solid var(--line); padding:6px 12px;
+  border-radius:20px; background:var(--surface);
+}
+.quick-links a:hover{ color:var(--lime); border-color:var(--lime); }
