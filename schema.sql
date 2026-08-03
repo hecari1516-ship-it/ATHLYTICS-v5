@@ -5,20 +5,6 @@
 --  Ejecutar completo en phpMyAdmin (pestaña SQL) o Workbench
 -- =====================================================================
 
--- ---------------------------------------------------------------------
--- MIGRACIÓN (v4): si ya tienes la base de datos de una versión anterior
--- y NO quieres borrar tus datos, ejecuta estas líneas (y luego vuelve a
--- ejecutar solo el bloque "VISTA: ficha_jugador" de más abajo para que
--- incluya la columna nueva) en vez de correr todo el script:
---
---   ALTER TABLE jugadores ADD COLUMN apodo VARCHAR(60) DEFAULT NULL AFTER nombre;
---   DROP VIEW IF EXISTS ficha_jugador;
---   -- luego copia y ejecuta el bloque CREATE VIEW ficha_jugador AS ... (más abajo)
---
--- Si prefieres empezar de cero, ejecuta el script completo de abajo
--- (esto borra toda la base de datos existente).
--- ---------------------------------------------------------------------
-
 DROP DATABASE IF EXISTS athlytics_db;
 CREATE DATABASE athlytics_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE athlytics_db;
@@ -183,7 +169,6 @@ CREATE TABLE partidos (
 
 -- ---------------------------------------------------------------------
 -- 11. PARTIDO_JUGADORES — rendimiento individual por partido
---     (mínimo 6 métricas, etiquetas dinámicas por deporte en config.php)
 -- ---------------------------------------------------------------------
 CREATE TABLE partido_jugadores (
     id                  INT AUTO_INCREMENT PRIMARY KEY,
@@ -238,10 +223,6 @@ BEGIN
        AND a.rpe IS NOT NULL
        AND s.fecha >= CURDATE() - INTERVAL 28 DAY;
 
-    -- Con muy poco historial, el promedio de 28 días se subestima y el ACWR
-    -- se dispara artificialmente (falso "alto riesgo"). Mientras se acumula
-    -- un mínimo de datos, se marca como 'Acumulando datos' en vez de arriesgar
-    -- una alerta falsa.
     IF v_primera_fecha IS NULL THEN
         SET v_acwr = NULL;
         SET v_riesgo = 'Sin datos';
@@ -270,9 +251,6 @@ END$$
 
 DELIMITER ;
 
--- =====================================================================
---  TRIGGERS
--- =====================================================================
 DELIMITER $$
 
 CREATE TRIGGER trg_asistencia_insert
